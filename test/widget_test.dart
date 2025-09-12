@@ -4,9 +4,9 @@ import 'package:test_application/myHomePage.dart';
 
 void main() {
   testWidgets('it renders correctly', (WidgetTester tester) async {
-    await tester.pumpWidget(const MaterialApp(
-      home: MyHomePage(title: 'Test Application'),
-    ));
+    await tester.pumpWidget(
+      const MaterialApp(home: MyHomePage(title: 'Test Application')),
+    );
 
     await tester.pumpAndSettle();
 
