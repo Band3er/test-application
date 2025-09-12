@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({required this.title, super.key});
 
   final String title;
 
@@ -29,8 +31,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  double? xCoordinate = 0;
-  double? yCoordinate = 0;
+  double xCoordinate = 0;
+  double yCoordinate = 0;
 
   List<Map<String, int>> colorHistory = [
     {'red': 255, 'green': 255, 'blue': 255},
@@ -43,18 +45,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    final double width = MediaQuery.of(context).size.width;
 
     final hexColor =
-        "${colorHistory.last['red']?.toRadixString(16)}${colorHistory.last['green']?.toRadixString(16)}${colorHistory.last['blue']?.toRadixString(16)}";
+        "${colorHistory.last['red']?.toRadixString(16)}"
+        "${colorHistory.last['green']?.toRadixString(16)}"
+        "${colorHistory.last['blue']?.toRadixString(16)}";
 
-    print(colorHistory.toString());
+    log(colorHistory.toString());
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         leading: IconButton(
-          icon: Icon(Icons.keyboard_return),
+          icon: const Icon(Icons.keyboard_return),
           onPressed: () => _previousColor(colorHistory),
         ),
         title: Text(widget.title),
@@ -65,6 +69,8 @@ class _MyHomePageState extends State<MyHomePage> {
         colorHistory.last['blue']!,
       ),
       body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTapDown: _onTapDown,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -74,19 +80,17 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
-        behavior: HitTestBehavior.opaque,
-        onTapDown: (TapDownDetails details) => _onTapDown(details),
       ),
     );
   }
 
-  _onTapDown(TapDownDetails details) {
+  void _onTapDown(TapDownDetails details) {
     xCoordinate = details.globalPosition.dx;
     yCoordinate = details.globalPosition.dy;
 
-    final colorRed = xCoordinate!.round() % 256;
-    final colorGreen = yCoordinate!.round() % 256;
-    final colorBlue = (xCoordinate! * yCoordinate!).round() % 256;
+    final colorRed = xCoordinate.round() % 256;
+    final colorGreen = yCoordinate.round() % 256;
+    final colorBlue = (xCoordinate * yCoordinate).round() % 256;
 
     setState(() {
       colorHistory.add({
@@ -96,19 +100,18 @@ class _MyHomePageState extends State<MyHomePage> {
       });
     });
 
-    print("dx: $xCoordinate \n dy: $yCoordinate");
+    log("dx: $xCoordinate \n dy: $yCoordinate");
   }
 
   Color? _setColor(int colorRed, int colorGreen, int colorBlue) {
     return Color.fromRGBO(colorRed, colorGreen, colorBlue, 1);
   }
 
-  _previousColor(List<dynamic> colorHistory) {
+  void _previousColor(List<dynamic> colorHistory) {
     setState(() {
-      if (colorHistory.length > 1) {
+      if (colorHistory.length <= 1) return;
         colorHistory.removeLast();
-        print(colorHistory.toString());
-      }
+        log(colorHistory.toString());
     });
   }
 }
