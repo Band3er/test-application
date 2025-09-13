@@ -45,4 +45,4 @@ It uses the package [solid_lints](https://pub.dev/packages/solid_lints) for stat
 
 ## Demo Video
 
-https://github.com/Band3er/test-application/video/video_app.mp4
+https://github.com/user-attachments/assets/c7872da5-c413-4906-be8d-bd3fd224fe3d
