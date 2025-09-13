@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:test_application/myHomePage.dart';
+import 'package:test_application/my_home_page.dart';
 
 void main() {
   testWidgets('it renders correctly', (WidgetTester tester) async {
