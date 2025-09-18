@@ -1,10 +1,18 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:test_application/features/color_changer/presentation/widgets/color_history_bottom_sheet.dart';
 
+/// Main page of the application.
+///
+/// Displays a tappable screen that changes background color randomly.
+/// The current and previous colors are stored in a history list, which
+/// can be viewed from a floating action button.
 class MyHomePage extends StatefulWidget {
+  /// Creates a [MyHomePage] with the given [title].
   const MyHomePage({required this.title, super.key});
 
+  /// Title displayed in the app bar.
   final String title;
 
   @override
@@ -14,6 +22,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<Color> _colorHistory = <Color>[Colors.white];
   final math.Random _random = math.Random();
+
+  static const int _fullOpacity = 0xFF;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +61,25 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: "View color history",
+        onPressed: _showColorHistory,
+        child: const Icon(Icons.history),
+      ),
+    );
+  }
+
+  void _showColorHistory() {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (_) => ColorHistoryBottomSheet(
+        colors: _colorHistory,
+        onColorSelected: (color) {
+          setState(() {
+            _colorHistory.add(color);
+          });
+        },
+      ),
     );
   }
 
@@ -61,8 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final int green = (colorInt >> 8) & 0xFF;
     final int blue = colorInt & 0xFF;
 
-    // ignore: no_magic_number
-    final Color newColor = Color.fromARGB(255, red, green, blue);
+    final Color newColor = Color.fromARGB(_fullOpacity, red, green, blue);
 
     setState(() {
       _colorHistory.add(newColor);
