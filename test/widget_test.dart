@@ -11,6 +11,6 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Hello there'), findsOneWidget);
-    expect(find.text('#ffffff'), findsOneWidget);
+    expect(find.text('#FFFFFF'), findsOneWidget);
   });
 }
